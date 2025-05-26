@@ -26,6 +26,7 @@ Step 8: Create Login(s)
 		On SQL02: CREATE LOGIN [DOMAIN\SQL01$] FROM WINDOWS;
 		
 Step 9: Restore or Create DATABASE
+
 Step 10: Enable Service Broker (if needed)
 		-> 	USE master;
 			GO
