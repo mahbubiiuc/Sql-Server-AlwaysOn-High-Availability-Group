@@ -46,9 +46,15 @@ Step 11:	Create Always On High Availabilty
 		-> Name: LankaBDSQL_AG, ClusterType: Windows Failover Cluster
 		-> Add Replica(s) [SQL01, SQL02], Set Backup Preferences [Any Replica Or Primary]
 
-Step 12: Grant Permission
+Step 12: Grant and Check Permission(s)
 		-> 	On SQL01: GRANT CONNECT ON ENDPOINT::Hadr_endpoint TO [DOMAIN\SQL02$];
 			On SQL02: GRANT CONNECT ON ENDPOINT::Hadr_endpoint TO [DOMAIN\SQL01$];
+		->	SELECT  e.name
+			       ,p.state_desc, SUSER_NAME(p.grantor_principal_id) AS Grantor
+			       ,p.permission_name, SUSER_NAME(p.grantee_principal_id) AS Grantee
+			  FROM sys.endpoints AS e
+			 INNER JOIN sys.server_permissions AS p ON e.endpoint_id = p.major_id
+			 WHERE name = 'Hadr_endpoint';
 
 Step 13: Add Listener [IF Exception: The WSFC cluster could not bring the Network Name resource with DNS name 'LankaBDAGListen' online. --> check (Step 5)]
 		-> Name: LankaBDAGListen [1433, add listener IP]
